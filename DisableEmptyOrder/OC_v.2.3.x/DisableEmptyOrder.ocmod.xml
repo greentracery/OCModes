@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<name>Запрет пустого заказа (for OpenCart v.2.3.0.x)</name>
+	<code>DisableEmptyOrder</code>
+	<version>1.0.0</version>
+	<author>Anatoly(greentracery@gmail.com)</author>
+	<link></link>
+	
+	<file path="catalog/view/theme/default/template/account/wishlist.tpl">
+		<operation>
+			<search><![CDATA[<button type="button" onclick="cart.add('<?php echo $product['product_id']; ?>');" data-toggle="tooltip" title="<?php echo $button_cart; ?>" class="btn btn-primary"><i class="fa fa-shopping-cart"></i></button>]]></search>
+			<add position="replace"><![CDATA[
+			<?php  if ( (float)$product['price'] != 0 ) { ?>
+				<button type="button" onclick="cart.add('<?php echo $product['product_id']; ?>');" data-toggle="tooltip" title="<?php echo $button_cart; ?>" class="btn btn-primary"><i class="fa fa-shopping-cart"></i></button>
+			<?php } else { ?>
+				<button type="button" onclick="return false;" disabled data-toggle="tooltip" title="<?php echo $button_cart; ?>" class="btn btn-primary"><i class="fa fa-shopping-cart"></i></button>
+			<?php } ?>
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/view/theme/default/template/extension/module/{bestseller,featured,latest,special}*.tpl">
+		<operation>
+			<search><![CDATA[<button type="button" onclick="cart.add('<?php echo $product['product_id']; ?>');"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md"><?php echo $button_cart; ?></span></button>]]></search>
+			<add position="replace"><![CDATA[
+			<?php  if ( (float)$product['price'] != 0 ) { ?>
+				<button type="button" onclick="cart.add('<?php echo $product['product_id']; ?>');"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md"><?php echo $button_cart; ?></span></button>
+			<?php } else { ?>
+				<button type="button" onclick="return false;" disabled><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md"><?php echo $button_cart; ?></span></button>
+			<?php } ?>
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/view/theme/default/template/product/{category,manufacturer_info,search,special}*.tpl">
+		<operation>
+			<search><![CDATA[<button type="button" onclick="cart.add('<?php echo $product['product_id']; ?>', '<?php echo $product['minimum']; ?>');"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md"><?php echo $button_cart; ?></span></button>]]></search>
+			<add position="replace"><![CDATA[
+			<?php  if ( (float)$product['price'] != 0 ) { ?>
+				<button type="button" onclick="cart.add('<?php echo $product['product_id']; ?>', '<?php echo $product['minimum']; ?>');"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md"><?php echo $button_cart; ?></span></button>
+			<?php } else { ?>
+				<button type="button" onclick="return false;" disabled><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md"><?php echo $button_cart; ?></span></button>
+			<?php } ?>
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/view/theme/default/template/product/product.tpl">
+		<operation>
+			<search><![CDATA[<button type="button" onclick="cart.add('<?php echo $product['product_id']; ?>', '<?php echo $product['minimum']; ?>');"><span class="hidden-xs hidden-sm hidden-md"><?php echo $button_cart; ?></span> <i class="fa fa-shopping-cart"></i></button>]]></search>
+			<add position="replace"><![CDATA[
+			<?php  if ( (float)$product['price'] != 0 ) { ?>
+				<button type="button" onclick="cart.add('<?php echo $product['product_id']; ?>', '<?php echo $product['minimum']; ?>');"><span class="hidden-xs hidden-sm hidden-md"><?php echo $button_cart; ?></span> <i class="fa fa-shopping-cart"></i></button>
+			<?php } else { ?>
+				<button type="button" onclick="return false;" disabled><span class="hidden-xs hidden-sm hidden-md"><?php echo $button_cart; ?></span> <i class="fa fa-shopping-cart"></i></button>
+			<?php } ?>
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/view/theme/default/template/product/compare.tpl">
+		<operation>
+			<search><![CDATA[<input type="button" value="<?php echo $button_cart; ?>" class="btn btn-primary btn-block" onclick="cart.add('<?php echo $product['product_id']; ?>', '<?php echo $product['minimum']; ?>');" />]]></search>
+			<add position="replace"><![CDATA[
+			<?php  if ( (int)$product['price'] != 0 ) { ?>
+				<input type="button" value="<?php echo $button_cart; ?>" class="btn btn-primary btn-block" onclick="cart.add('<?php echo $product['product_id']; ?>', '<?php echo $product['minimum']; ?>');" />
+			<?php } else { ?>
+				<input type="button" value="<?php echo $button_cart; ?>" class="btn btn-primary btn-block" onclick="return false;" disabled />
+			<?php } ?>
+			]]></add>
+		</operation>
+	</file>
+
+	<file path="catalog/view/theme/default/template/product/product.tpl">
+		<operation>
+			<search><![CDATA[<button type="button" id="button-cart" data-loading-text="<?php echo $text_loading; ?>" class="btn btn-primary btn-lg btn-block"><?php echo $button_cart; ?></button>]]></search>
+			<add position="replace"><![CDATA[
+			<?php  if ( (int)$price != 0 ) { ?>
+				<button type="button" id="button-cart" data-loading-text="<?php echo $text_loading; ?>" class="btn btn-primary btn-lg btn-block"><?php echo $button_cart; ?></button>
+			<?php } else { ?>
+				<button type="button" id="button-cart-disabled" disabled data-loading-text="<?php echo $text_loading; ?>" class="btn btn-primary btn-lg btn-block"><?php echo $button_cart; ?></button>
+			<?php } ?>
+			]]></add>
+		</operation>
+	</file>
+
+</modification>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<name>Цена по запросу (modified for OpenCart v.2.3.0.x)</name>
+	<code>PriceByRequest</code>
+	<version>1.0.1</version>
+	<author>Tom(Opencartforum), modified by Anatoly(greentracery@gmail.com)</author>
+	<link></link>
+	
+	<file path="catalog/language/en-gb/*.php">
+		<operation>
+			<search><![CDATA[// Text]]></search>
+			<add position="after"><![CDATA[$_['text_price_free'] = 'Price on request';]]>
+			</add>
+		</operation>
+	</file>
+	<file path="catalog/language/ru-ru/*.php">
+		<operation>
+			<search><![CDATA[// Text]]></search>
+			<add position="after"><![CDATA[$_['text_price_free'] = 'Цена по запросу';]]>
+			</add>
+		</operation>
+	</file>
+
+	<file path="catalog/controller/product/product.php">
+		<operation>
+			<search><![CDATA[$data['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);]]></search>
+			<add position="replace"><![CDATA[
+				if ( (float)$product_info['price'] != 0 ) {
+				    $data['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+				} else {
+				    $data['price'] = $this->language->get('text_price_free');
+			    }
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/controller/product/{category,manufacturer,product,special,search}*.php">
+		<operation>
+			<search><![CDATA[$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);]]></search>
+			<add position="replace"><![CDATA[
+				if ( (float)$result['price'] != 0 ) {
+				    $price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+				} else {
+				    $price = $this->language->get('text_price_free');
+				}
+			]]></add>
+		</operation>
+	</file>
+    <file path="catalog/controller/extension/module/{bestseller,latest,special}*.php">
+		<operation>
+			<search><![CDATA[$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);]]></search>
+			<add position="replace"><![CDATA[
+				if ( (float)$result['price'] != 0 ) {
+				    $price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+				} else {
+				    $price = $this->language->get('text_price_free');
+				}
+			]]></add>
+		</operation>
+	</file>
+    
+	<file path="catalog/controller/account/wishlist.php">
+		<operation>
+			<search><![CDATA[$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);]]></search>
+			<add position="replace"><![CDATA[
+				if ( (float)$product_info['price'] != 0 ) {
+				    $price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+				} else {
+				    $price = $this->language->get('text_price_free');
+				}
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/controller/product/compare.php">
+		<operation>
+			<search><![CDATA[$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);]]></search>
+			<add position="replace"><![CDATA[
+				if ( (float)$product_info['price'] != 0 ) {
+				    $price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+				} else {
+				    $price = $this->language->get('text_price_free');
+				}
+			]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/controller/extension/module/featured.php">
+		<operation>
+			<search><![CDATA[$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);]]></search>
+			<add position="replace"><![CDATA[
+				if ( (float)$product_info['price'] > 0 ) {
+				    $price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+				} else {
+				    $price = $this->language->get('text_price_free');
+				}
+			]]></add>
+		</operation>
+	</file>
+	
+</modification>

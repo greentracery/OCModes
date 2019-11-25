@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<name>ImageWatermark (for OpenCart v.2.3.0.x)</name>
+	<code>ImageWatermark</code>
+	<version>1.0.0</version>
+	<author>Anatoly(greentracery@gmail.com)</author>
+	<link></link>
+	
+	<file path="catalog/model/tool/image.php">
+		<operation>
+			<search><![CDATA[$image = new Image(DIR_IMAGE . $image_old);]]></search>
+			<add position="after"><![CDATA[
+				if (($width >= 640 || $height >= 480) && (strpos($image_old, 'banner') === false) ) {
+				  $image->watermark(new Image(DIR_IMAGE . 'watermark.png'), 'bottomright');
+				}
+			]]></add>
+		</operation>
+	</file>
+	
+</modification>
