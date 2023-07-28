@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>Форма обратной связи не чаще одного раза в 30 секунд (for OpenCart v.2.3.0.x)</name>
+    <code>SlowdownFeedback</code>
+    <version>1.0.0</version>
+    <author>Anatoly(greentracery@gmail.com)</author>
+    <link></link>
+    
+    <file path="catalog/controller/information/contact.php">
+        <operation>
+            <search><![CDATA[$this->response->setOutput($this->load->view('information/contact', $data));]]></search>
+            <add position="before"><![CDATA[
+            // set session timestamp when sending mail will be avalaible (from SlowdownFeedback.ocmod):
+            $tm = time(); 
+            $this->session->data['mail_ttl'][$this->request->server['REMOTE_ADDR']] = ($tm + 30); 
+]]>
+            </add>
+        </operation>
+        <operation>
+            <search><![CDATA[return !$this->error;]]></search>
+            <add position="before"><![CDATA[
+            // validate current timestamp and session timestamp (from SlowdownFeedback.ocmod):
+            $tm = time(); 
+            if(!isset($this->session->data['mail_ttl'][$this->request->server['REMOTE_ADDR']])) {
+                $this->error['name'] = $this->language->get('error_mail_ttl');
+            }else{
+                if($this->session->data['mail_ttl'][$this->request->server['REMOTE_ADDR']] >= $tm ){ 
+                    $email=(isset($this->request->post['email']))?$this->request->post['email'] : 'unknown'; 
+                    $this->log->write(
+                        $this->request->server['REMOTE_ADDR'].' - '.$email.' - '
+                        .$this->language->get('error_mail_ttl_log')
+                        .'(time='.$tm.', ttl='.$this->session->data['mail_ttl'][$this->request->server['REMOTE_ADDR']].')'
+        
+                    ); 
+                $this->error['name'] = $this->language->get('error_mail_ttl'); 
+                }
+            }
+]]>
+            </add>
+        </operation>
+        <operation>
+            <search><![CDATA[$mail = new Mail();]]></search>
+            <add position="before"><![CDATA[
+                // write action into logfile (from SlowdownFeedback.ocmod):
+                $tm = time();
+                $this->log->write(
+                    $this->request->server['REMOTE_ADDR'].' - '
+                    .$this->request->post['email'].' - '
+                    .$this->language->get('warn_mail_log')
+                    .'(time='.$tm.', ttl='.$this->session->data['mail_ttl'][$this->request->server['REMOTE_ADDR']].')'
+                );
+                // unset session timestamp
+                $this->session->data['mail_ttl'][$this->request->server['REMOTE_ADDR']] = null; 
+]]>
+            </add>
+        </operation>
+        <operation>
+            <search><![CDATA[$this->response->setOutput($this->load->view('common/success', $data));]]></search>
+            <add position="before"><![CDATA[
+                // unset session timestamp (from SlowdownFeedback.ocmod):
+                $this->session->data['mail_ttl'][$this->request->server['REMOTE_ADDR']] = null; 
+]]>
+            </add>
+        </operation>
+    </file>
+    
+    <file path="catalog/language/ru-ru/information/contact.php">
+        <operation>
+            <search><![CDATA[$_['error_enquiry']  = 'Длина текста должна быть от 10 до 3000 символов!';]]></search>
+            <add position="after"><![CDATA[
+// New Errors (from SlowdownFeedback.ocmod):
+$_['error_mail_ttl']  = 'Что-то пошло не так... Попробуйте повторить отправку через 30 секунд.'; 
+$_['error_mail_ttl_log']  = 'Зафиксирована попытка отправки спама через форму обратной связи.'; 
+$_['warn_mail_log']  = 'Попытка отправки e-mail через форму обратной связи.'; 
+]]>
+            </add>
+        </operation>
+    </file>
+    
+    <file path="catalog/language/en-gb/information/contact.php">
+        <operation>
+            <search><![CDATA[$_['error_enquiry']  = 'Enquiry must be between 10 and 3000 characters!';]]></search>
+            <add position="after"><![CDATA[
+// New Errors (from SlowdownFeedback.ocmod):
+$_['error_mail_ttl']  = 'Sorry, try to repeat action after 30 sec. '; 
+$_['error_mail_ttl_log']  = 'Warning! The attempt of sending spam via feedback form was found. '; 
+$_['warn_mail_log']  = 'Attempt to send e-mail via feedback form was found'; 
+]]>
+            </add>
+        </operation>
+    </file>
+    
+</modification>
